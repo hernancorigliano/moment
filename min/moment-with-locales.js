@@ -1814,21 +1814,24 @@ function chooseLocale(names) {
     return null;
 }
 
-function loadLocale(name) {
-    var oldLocale = null;
-    // TODO: Find a better way to register and load all the locales in Node
-    if (!locales[name] && (typeof module !== 'undefined') &&
+
+    var hackedRequireToIgnoreError = require;
+
+    function loadLocale(name) {
+        var oldLocale = null;
+        // TODO: Find a better way to register and load all the locales in Node
+        if (!locales[name] && (typeof module !== 'undefined') &&
             module && module.exports) {
-        try {
-            oldLocale = globalLocale._abbr;
-            require('./locale/' + name);
-            // because defineLocale currently also sets the global locale, we
-            // want to undo that for lazy loaded locales
-            getSetGlobalLocale(oldLocale);
-        } catch (e) { }
+            try {
+                oldLocale = globalLocale._abbr;
+                hackedRequireToIgnoreError('../src/locale/' + name);
+                // because defineLocale currently also sets the global locale, we
+                // want to undo that for lazy loaded locales
+                getSetGlobalLocale(oldLocale);
+            } catch (e) { }
+        }
+        return locales[name];
     }
-    return locales[name];
-}
 
 // This function will load locale and then set the global locale.  If
 // no arguments are passed in, it will simply return the current global
