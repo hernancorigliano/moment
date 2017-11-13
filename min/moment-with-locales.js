@@ -1824,10 +1824,10 @@ function chooseLocale(names) {
             module && module.exports) {
             try {
                 oldLocale = globalLocale._abbr;
-                hackedRequireToIgnoreError('../src/locale/' + name);
+                //hackedRequireToIgnoreError('../src/locale/' + name);
                 // because defineLocale currently also sets the global locale, we
                 // want to undo that for lazy loaded locales
-                getSetGlobalLocale(oldLocale);
+                //getSetGlobalLocale(oldLocale);
             } catch (e) { }
         }
         return locales[name];
